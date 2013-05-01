@@ -32,7 +32,9 @@ public class BankRepository extends Repository
 		);
 
 		RunsafeInventory inventory = RunsafeServer.Instance.createInventory(null, 54, "Bank");
-		inventory.unserialize((String) data.get("bankInventory"));
+
+		if (data != null)
+			inventory.unserialize((String) data.get("bankInventory"));
 
 		return inventory;
 	}
