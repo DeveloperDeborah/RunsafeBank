@@ -24,8 +24,9 @@ public class Interact implements IPlayerInteractEvent
 			RunsafePlayer player = event.getPlayer();
 			if (player.hasPermission("runsafe.bank.use"))
 				player.openInventory(this.bankRepository.get(player));
+			
+			event.setCancelled(true);
 		}
-		event.setCancelled(true);
 	}
 
 	private IOutput output;
