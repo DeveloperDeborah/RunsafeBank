@@ -15,6 +15,9 @@ public class Plugin extends RunsafePlugin
 		addComponent(CloseInventory.class);
 		addComponent(PlayerQuit.class);
 
+		// Handlers
+		addComponent(BankHandler.class);
+
 		// Database Repositories
 		addComponent(BankRepository.class);
 	}
