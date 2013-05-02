@@ -19,6 +19,7 @@ public class PlayerQuit implements IPlayerQuitEvent
 		RunsafePlayer player = event.getPlayer();
 		if (this.bankHandler.isViewingBank(player))
 			this.bankHandler.closePlayerBank(player);
+
 	}
 
 	private BankHandler bankHandler;

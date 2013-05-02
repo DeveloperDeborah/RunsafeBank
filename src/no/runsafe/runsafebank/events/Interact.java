@@ -19,15 +19,22 @@ public class Interact implements IPlayerInteractEvent
 	@Override
 	public void OnPlayerInteractEvent(RunsafePlayerInteractEvent event)
 	{
-		if (event.getBlock().getTypeId() == Material.ENDER_CHEST.getId())
+		try
 		{
-			RunsafePlayer player = event.getPlayer();
-			if (player.hasPermission("runsafe.bank.use"))
-				this.bankHandler.openPlayerBank(player, player);
-			else
-				player.sendColouredMessage("&cYou do not have permission to use the bank.");
+			if (event.getBlock().getTypeId() == Material.ENDER_CHEST.getId())
+			{
+				RunsafePlayer player = event.getPlayer();
+				if (player.hasPermission("runsafe.bank.use"))
+					this.bankHandler.openPlayerBank(player, player);
+				else
+					player.sendColouredMessage("&cYou do not have permission to use the bank.");
 
-			event.setCancelled(true);
+				event.setCancelled(true);
+			}
+		}
+		catch (NullPointerException e)
+		{
+			// Was not an event we care for.
 		}
 	}
 
