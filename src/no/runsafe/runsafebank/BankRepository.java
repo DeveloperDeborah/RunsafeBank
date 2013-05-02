@@ -26,12 +26,13 @@ public class BankRepository extends Repository
 
 	public RunsafeInventory get(RunsafePlayer player)
 	{
+		String playerName = player.getName();
 		Map<String, Object> data = database.QueryRow(
 			"SELECT bankInventory FROM runsafeBanks WHERE playerName=?",
-			player.getName()
+			playerName
 		);
 
-		RunsafeInventory inventory = RunsafeServer.Instance.createInventory(null, 54, "Bank");
+		RunsafeInventory inventory = RunsafeServer.Instance.createInventory(null, 54, String.format("%s's Bank Vault", playerName));
 
 		if (data != null)
 			inventory.unserialize((String) data.get("bankInventory"));
