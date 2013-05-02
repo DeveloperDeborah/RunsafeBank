@@ -5,15 +5,15 @@ import no.runsafe.framework.output.IOutput;
 import no.runsafe.framework.server.event.player.RunsafePlayerInteractEvent;
 
 import no.runsafe.framework.server.player.RunsafePlayer;
-import no.runsafe.runsafebank.BankRepository;
+import no.runsafe.runsafebank.BankHandler;
 import org.bukkit.Material;
 
 public class Interact implements IPlayerInteractEvent
 {
-	public Interact(BankRepository bankRepository, IOutput output)
+	public Interact(IOutput output, BankHandler bankHandler)
 	{
 		this.output = output;
-		this.bankRepository = bankRepository;
+		this.bankHandler = bankHandler;
 	}
 
 	@Override
@@ -23,12 +23,14 @@ public class Interact implements IPlayerInteractEvent
 		{
 			RunsafePlayer player = event.getPlayer();
 			if (player.hasPermission("runsafe.bank.use"))
-				player.openInventory(this.bankRepository.get(player));
+				this.bankHandler.openPlayerBank(player, player);
+			else
+				player.sendColouredMessage("&cYou do not have permission to use the bank.");
 
 			event.setCancelled(true);
 		}
 	}
 
 	private IOutput output;
-	private BankRepository bankRepository;
+	private BankHandler bankHandler;
 }
