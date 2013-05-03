@@ -24,9 +24,17 @@ public class BankHandler
 		return this.bankingPlayers.containsKey(player.getName());
 	}
 
-	public void savePlayerBank(RunsafePlayer player, RunsafeInventory bank)
+	public String getViewingBank(RunsafePlayer player)
 	{
-		this.bankRepository.update(player, bank);
+		if (this.isViewingBank(player))
+			return this.bankingPlayers.get(player.getName());
+
+		return null;
+	}
+
+	public void savePlayerBank(String bankOwner, RunsafeInventory bank)
+	{
+		this.bankRepository.update(bankOwner, bank);
 	}
 
 	public void closePlayerBank(RunsafePlayer viewer)

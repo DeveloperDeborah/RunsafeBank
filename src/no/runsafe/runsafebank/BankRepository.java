@@ -40,13 +40,13 @@ public class BankRepository extends Repository
 		return inventory;
 	}
 
-	public void update(RunsafePlayer player, RunsafeInventory inventory)
+	public void update(String bankOwner, RunsafeInventory inventory)
 	{
 		String inventoryString = inventory.serialize();
 		database.Execute(
 			"INSERT INTO `runsafeBanks` (playerName, bankInventory) VALUES(?,?) " +
 				"ON DUPLICATE KEY UPDATE bankInventory = ?",
-			player.getName(), inventoryString, inventoryString
+			bankOwner, inventoryString, inventoryString
 		);
 	}
 
