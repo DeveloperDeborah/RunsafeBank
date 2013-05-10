@@ -4,6 +4,7 @@ import no.runsafe.framework.RunsafePlugin;
 import no.runsafe.runsafebank.commands.ViewBank;
 import no.runsafe.runsafebank.events.CloseInventory;
 import no.runsafe.runsafebank.events.Interact;
+import no.runsafe.runsafebank.events.InventoryClick;
 import no.runsafe.runsafebank.events.PlayerQuit;
 
 public class Plugin extends RunsafePlugin
@@ -13,8 +14,9 @@ public class Plugin extends RunsafePlugin
 	{
 		// Events
 		addComponent(Interact.class);
-		addComponent(CloseInventory.class);
 		addComponent(PlayerQuit.class);
+		addComponent(InventoryClick.class);
+		addComponent(CloseInventory.class);
 
 		// Handlers
 		addComponent(BankHandler.class);

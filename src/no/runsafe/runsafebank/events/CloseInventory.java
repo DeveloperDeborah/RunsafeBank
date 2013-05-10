@@ -17,10 +17,7 @@ public class CloseInventory implements IInventoryClosed
 	{
 		RunsafePlayer player = event.getPlayer();
 		if (this.bankHandler.isViewingBank(player))
-		{
-			this.bankHandler.savePlayerBank(this.bankHandler.getViewingBank(player), event.getInventory());
 			this.bankHandler.closePlayerBank(player);
-		}
 	}
 
 	private BankHandler bankHandler;
