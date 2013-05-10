@@ -7,6 +7,7 @@ import no.runsafe.framework.server.event.player.RunsafePlayerInteractEvent;
 import no.runsafe.framework.server.player.RunsafePlayer;
 import no.runsafe.runsafebank.BankHandler;
 import org.bukkit.Material;
+import org.bukkit.event.block.Action;
 
 public class Interact implements IPlayerInteractEvent
 {
@@ -19,8 +20,7 @@ public class Interact implements IPlayerInteractEvent
 	public void OnPlayerInteractEvent(RunsafePlayerInteractEvent event)
 	{
 		RunsafeBlock block = event.getBlock();
-
-		if (block != null)
+		if (block != null && event.getAction() == Action.RIGHT_CLICK_BLOCK)
 		{
 			if (block.getTypeId() == Material.ENDER_CHEST.getId())
 			{
