@@ -1,7 +1,6 @@
 package no.runsafe.runsafebank.events;
 
 import no.runsafe.framework.event.player.IPlayerInteractEvent;
-import no.runsafe.framework.output.IOutput;
 import no.runsafe.framework.server.block.RunsafeBlock;
 import no.runsafe.framework.server.event.player.RunsafePlayerInteractEvent;
 
@@ -11,9 +10,8 @@ import org.bukkit.Material;
 
 public class Interact implements IPlayerInteractEvent
 {
-	public Interact(IOutput output, BankHandler bankHandler)
+	public Interact(BankHandler bankHandler)
 	{
-		this.output = output;
 		this.bankHandler = bankHandler;
 	}
 
@@ -37,6 +35,5 @@ public class Interact implements IPlayerInteractEvent
 		}
 	}
 
-	private IOutput output;
 	private BankHandler bankHandler;
 }
