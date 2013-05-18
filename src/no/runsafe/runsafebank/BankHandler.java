@@ -5,7 +5,9 @@ import no.runsafe.framework.server.inventory.RunsafeInventory;
 import no.runsafe.framework.server.player.RunsafePlayer;
 import no.runsafe.framework.timer.IScheduler;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class BankHandler
@@ -41,6 +43,7 @@ public class BankHandler
 
 	private void saveLoadedBanks()
 	{
+		List<String> oldBanks = new ArrayList<String>();
 		for (Map.Entry<String, RunsafeInventory> bank : this.loadedBanks.entrySet())
 		{
 			RunsafeInventory bankInventory = bank.getValue();
@@ -49,10 +52,13 @@ public class BankHandler
 			this.output.fine("Saved bank to database: " + ownerName);
 
 			if (bankInventory.getViewers().isEmpty())
-			{
-				this.loadedBanks.remove(ownerName);
-				this.output.fine("Removing silent bank reference for GC: " + ownerName);
-			}
+				oldBanks.add(ownerName);
+		}
+
+		for (String ownerName : oldBanks)
+		{
+			this.loadedBanks.remove(ownerName);
+			this.output.fine("Removing silent bank reference for GC: " + ownerName);
 		}
 	}
 
