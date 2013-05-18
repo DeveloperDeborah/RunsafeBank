@@ -4,7 +4,6 @@ import no.runsafe.framework.database.IDatabase;
 import no.runsafe.framework.database.Repository;
 import no.runsafe.framework.server.RunsafeServer;
 import no.runsafe.framework.server.inventory.RunsafeInventory;
-import no.runsafe.framework.server.player.RunsafePlayer;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,9 +23,8 @@ public class BankRepository extends Repository
 		return "runsafeBanks";
 	}
 
-	public RunsafeInventory get(RunsafePlayer player)
+	public RunsafeInventory get(String playerName)
 	{
-		String playerName = player.getName();
 		Map<String, Object> data = database.QueryRow(
 			"SELECT bankInventory FROM runsafeBanks WHERE playerName=?",
 			playerName

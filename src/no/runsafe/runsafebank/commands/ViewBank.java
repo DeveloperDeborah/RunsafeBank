@@ -21,7 +21,7 @@ public class ViewBank extends PlayerCommand
 		RunsafePlayer player = RunsafeServer.Instance.getPlayer(parameters.get("player"));
 
 		if (player != null)
-			this.bankHandler.openPlayerBank(executor, player);
+			this.bankHandler.openBank(executor, player);
 		else
 			 executor.sendColouredMessage("&cThe player you are looking for does not exist.");
 

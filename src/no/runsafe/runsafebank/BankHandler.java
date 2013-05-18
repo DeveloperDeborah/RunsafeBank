@@ -1,47 +1,62 @@
 package no.runsafe.runsafebank;
 
+import no.runsafe.framework.output.IOutput;
 import no.runsafe.framework.server.inventory.RunsafeInventory;
 import no.runsafe.framework.server.player.RunsafePlayer;
+import no.runsafe.framework.timer.IScheduler;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class BankHandler
 {
-	public BankHandler(BankRepository bankRepository)
+	public BankHandler(BankRepository bankRepository, IOutput output, IScheduler scheduler)
 	{
 		this.bankRepository = bankRepository;
-		this.bankingPlayers = new HashMap<String, String>();
+		this.output = output;
+
+		scheduler.startAsyncRepeatingTask(new Runnable() {
+			@Override
+			public void run() {
+				saveLoadedBanks();
+			}
+		}, 60, 60);
 	}
 
-	public void openPlayerBank(RunsafePlayer viewer, RunsafePlayer player)
+	public void openBank(RunsafePlayer viewer, RunsafePlayer owner)
 	{
-		this.bankingPlayers.put(viewer.getName(), player.getName());
-		viewer.openInventory(this.bankRepository.get(player));
+		String ownerName = owner.getName();
+		if (!this.loadedBanks.containsKey(ownerName))
+			this.loadBank(ownerName);
+
+		viewer.openInventory(this.loadedBanks.get(ownerName));
+		this.output.fine(String.format("Opening %s's bank for %s", ownerName, viewer.getName()));
 	}
 
-	public boolean isViewingBank(RunsafePlayer player)
+	private void loadBank(String ownerName)
 	{
-		return this.bankingPlayers.containsKey(player.getName());
+		this.loadedBanks.put(ownerName, bankRepository.get(ownerName));
+		this.output.fine("Loaded bank from database for " + ownerName);
 	}
 
-	public String getViewingBank(RunsafePlayer player)
+	private void saveLoadedBanks()
 	{
-		if (this.isViewingBank(player))
-			return this.bankingPlayers.get(player.getName());
+		for (Map.Entry<String, RunsafeInventory> bank : this.loadedBanks.entrySet())
+		{
+			RunsafeInventory bankInventory = bank.getValue();
+			String ownerName = bank.getKey();
+			this.bankRepository.update(ownerName, bankInventory);
+			this.output.fine("Saved bank to database: " + ownerName);
 
-		return null;
+			if (bankInventory.getViewers().isEmpty())
+			{
+				this.loadedBanks.remove(ownerName);
+				this.output.fine("Removing silent bank reference for GC: " + ownerName);
+			}
+		}
 	}
 
-	public void savePlayerBank(String bankOwner, RunsafeInventory bank)
-	{
-		this.bankRepository.update(bankOwner, bank);
-	}
-
-	public void closePlayerBank(RunsafePlayer viewer)
-	{
-		this.bankingPlayers.remove(viewer.getName());
-	}
-
-	private HashMap<String, String> bankingPlayers;
+	private HashMap<String, RunsafeInventory> loadedBanks = new HashMap<String, RunsafeInventory>();
 	private BankRepository bankRepository;
+	private IOutput output;
 }
