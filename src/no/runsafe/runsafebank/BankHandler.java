@@ -1,5 +1,6 @@
 package no.runsafe.runsafebank;
 
+import no.runsafe.framework.event.IPluginDisabled;
 import no.runsafe.framework.output.IOutput;
 import no.runsafe.framework.server.inventory.RunsafeInventory;
 import no.runsafe.framework.server.player.RunsafePlayer;
@@ -10,7 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class BankHandler
+public class BankHandler implements IPluginDisabled
 {
 	public BankHandler(BankRepository bankRepository, IOutput output, IScheduler scheduler)
 	{
@@ -60,6 +61,26 @@ public class BankHandler
 			this.loadedBanks.remove(ownerName);
 			this.output.fine("Removing silent bank reference for GC: " + ownerName);
 		}
+	}
+
+	private void forceBanksShut()
+	{
+		for (Map.Entry<String, RunsafeInventory> bank : this.loadedBanks.entrySet())
+		{
+			for (RunsafePlayer viewer : bank.getValue().getViewers())
+			{
+				viewer.sendColouredMessage("&cServer restarting, you have been forced out of your bank.");
+				viewer.closeInventory();
+			}
+		}
+	}
+
+	@Override
+	public void OnPluginDisabled()
+	{
+		this.output.write("Shutdown detected, forcing save of all loaded banks.");
+		this.forceBanksShut();
+		this.saveLoadedBanks();
 	}
 
 	private HashMap<String, RunsafeInventory> loadedBanks = new HashMap<String, RunsafeInventory>();
