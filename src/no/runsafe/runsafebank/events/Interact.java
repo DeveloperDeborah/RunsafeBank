@@ -18,7 +18,7 @@ public class Interact implements IPlayerInteractEvent
 	public void OnPlayerInteractEvent(RunsafePlayerInteractEvent event)
 	{
 		RunsafeBlock block = event.getBlock();
-		if (block != null && event.isRightClick() && block.getTypeId() == Item.Decoration.EnderChest.getTypeID())
+		if (block != null && event.isRightClick() && block.is(Item.Decoration.EnderChest))
 		{
 			RunsafePlayer player = event.getPlayer();
 			if (player.hasPermission("runsafe.bank.use"))
