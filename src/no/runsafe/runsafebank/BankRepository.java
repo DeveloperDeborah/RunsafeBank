@@ -2,13 +2,13 @@ package no.runsafe.runsafebank;
 
 import no.runsafe.framework.database.IDatabase;
 import no.runsafe.framework.database.Repository;
+import no.runsafe.framework.database.Row;
 import no.runsafe.framework.server.RunsafeServer;
 import no.runsafe.framework.server.inventory.RunsafeInventory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class BankRepository extends Repository
 {
@@ -25,7 +25,7 @@ public class BankRepository extends Repository
 
 	public RunsafeInventory get(String playerName)
 	{
-		Map<String, Object> data = database.QueryRow(
+		Row data = database.QueryRow(
 			"SELECT bankInventory FROM runsafeBanks WHERE playerName=?",
 			playerName
 		);
@@ -33,7 +33,7 @@ public class BankRepository extends Repository
 		RunsafeInventory inventory = RunsafeServer.Instance.createInventory(null, 54, String.format("%s's Bank Vault", playerName));
 
 		if (data != null)
-			inventory.unserialize((String) data.get("bankInventory"));
+			inventory.unserialize(data.String("bankInventory"));
 
 		return inventory;
 	}
