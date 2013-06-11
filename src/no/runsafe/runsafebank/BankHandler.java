@@ -1,10 +1,10 @@
 package no.runsafe.runsafebank;
 
-import no.runsafe.framework.event.IPluginDisabled;
-import no.runsafe.framework.output.IOutput;
-import no.runsafe.framework.server.inventory.RunsafeInventory;
-import no.runsafe.framework.server.player.RunsafePlayer;
-import no.runsafe.framework.timer.IScheduler;
+import no.runsafe.framework.api.IOutput;
+import no.runsafe.framework.api.IScheduler;
+import no.runsafe.framework.api.event.plugin.IPluginDisabled;
+import no.runsafe.framework.minecraft.inventory.RunsafeInventory;
+import no.runsafe.framework.minecraft.player.RunsafePlayer;
 
 import java.util.ArrayList;
 import java.util.HashMap;
