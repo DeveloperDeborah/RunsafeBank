@@ -1,8 +1,8 @@
 package no.runsafe.runsafebank;
 
 import no.runsafe.framework.api.database.IDatabase;
-import no.runsafe.framework.internal.database.Repository;
-import no.runsafe.framework.internal.database.Row;
+import no.runsafe.framework.api.database.IRow;
+import no.runsafe.framework.api.database.Repository;
 import no.runsafe.framework.minecraft.RunsafeServer;
 import no.runsafe.framework.minecraft.inventory.RunsafeInventory;
 
@@ -25,7 +25,7 @@ public class BankRepository extends Repository
 
 	public RunsafeInventory get(String playerName)
 	{
-		Row data = database.QueryRow(
+		IRow data = database.QueryRow(
 			"SELECT bankInventory FROM runsafeBanks WHERE playerName=?",
 			playerName
 		);
