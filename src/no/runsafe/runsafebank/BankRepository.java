@@ -1,7 +1,6 @@
 package no.runsafe.runsafebank;
 
 import no.runsafe.framework.api.database.IDatabase;
-import no.runsafe.framework.api.database.IRow;
 import no.runsafe.framework.api.database.Repository;
 import no.runsafe.framework.minecraft.RunsafeServer;
 import no.runsafe.framework.minecraft.inventory.RunsafeInventory;
@@ -25,15 +24,14 @@ public class BankRepository extends Repository
 
 	public RunsafeInventory get(String playerName)
 	{
-		IRow data = database.QueryRow(
+		RunsafeInventory inventory = RunsafeServer.Instance.createInventory(null, 54, String.format("%s's Bank Vault", playerName));
+
+		String serialized = database.QueryString(
 			"SELECT bankInventory FROM runsafeBanks WHERE playerName=?",
 			playerName
 		);
-
-		RunsafeInventory inventory = RunsafeServer.Instance.createInventory(null, 54, String.format("%s's Bank Vault", playerName));
-
-		if (data != null)
-			inventory.unserialize(data.String("bankInventory"));
+		if (serialized != null)
+			inventory.unserialize(serialized);
 
 		return inventory;
 	}
@@ -54,11 +52,11 @@ public class BankRepository extends Repository
 		HashMap<Integer, List<String>> versions = new HashMap<Integer, List<String>>();
 		ArrayList<String> sql = new ArrayList<String>();
 		sql.add(
-				"CREATE TABLE `runsafeBanks` (" +
-						"`playerName` varchar(50) NOT NULL," +
-						"`bankInventory` longtext," +
-						"PRIMARY KEY (`playerName`)" +
-						")"
+			"CREATE TABLE `runsafeBanks` (" +
+				"`playerName` varchar(50) NOT NULL," +
+				"`bankInventory` longtext," +
+				"PRIMARY KEY (`playerName`)" +
+				")"
 		);
 		versions.put(1, sql);
 
