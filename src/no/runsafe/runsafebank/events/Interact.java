@@ -26,7 +26,7 @@ public class Interact implements IPlayerInteractEvent
 			else
 				player.sendColouredMessage("&cYou do not have permissions to use the bank.");
 
-			event.setCancelled(true);
+			event.cancel();
 		}
 	}
 
