@@ -5,7 +5,7 @@ import no.runsafe.framework.minecraft.RunsafeServer;
 import no.runsafe.framework.minecraft.player.RunsafePlayer;
 import no.runsafe.runsafebank.BankHandler;
 
-import java.util.HashMap;
+import java.util.Map;
 
 public class ViewBank extends PlayerCommand
 {
@@ -16,14 +16,14 @@ public class ViewBank extends PlayerCommand
 	}
 
 	@Override
-	public String OnExecute(RunsafePlayer executor, HashMap<String, String> parameters)
+	public String OnExecute(RunsafePlayer executor, Map<String, String> parameters)
 	{
 		RunsafePlayer player = RunsafeServer.Instance.getPlayer(parameters.get("player"));
 
 		if (player != null)
 			this.bankHandler.openBank(executor, player);
 		else
-			 executor.sendColouredMessage("&cThe player you are looking for does not exist.");
+			executor.sendColouredMessage("&cThe player you are looking for does not exist.");
 
 		return null;
 	}
