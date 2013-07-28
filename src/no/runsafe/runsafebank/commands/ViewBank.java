@@ -1,5 +1,6 @@
 package no.runsafe.runsafebank.commands;
 
+import no.runsafe.framework.api.command.argument.PlayerArgument;
 import no.runsafe.framework.api.command.player.PlayerCommand;
 import no.runsafe.framework.minecraft.RunsafeServer;
 import no.runsafe.framework.minecraft.player.RunsafePlayer;
@@ -11,7 +12,10 @@ public class ViewBank extends PlayerCommand
 {
 	public ViewBank(BankHandler bankHandler)
 	{
-		super("viewbank", "Opens a players bank", "runsafe.bank.view", "player");
+		super(
+			"viewbank", "Opens a players bank", "runsafe.bank.view",
+			new PlayerArgument()
+		);
 		this.bankHandler = bankHandler;
 	}
 
