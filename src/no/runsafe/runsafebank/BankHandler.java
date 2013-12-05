@@ -1,6 +1,6 @@
 package no.runsafe.runsafebank;
 
-import no.runsafe.framework.api.IOutput;
+import no.runsafe.framework.api.IDebug;
 import no.runsafe.framework.api.IScheduler;
 import no.runsafe.framework.api.event.plugin.IPluginDisabled;
 import no.runsafe.framework.minecraft.inventory.RunsafeInventory;
@@ -13,14 +13,16 @@ import java.util.Map;
 
 public class BankHandler implements IPluginDisabled
 {
-	public BankHandler(BankRepository bankRepository, IOutput output, IScheduler scheduler)
+	public BankHandler(BankRepository bankRepository, IDebug output, IScheduler scheduler)
 	{
 		this.bankRepository = bankRepository;
-		this.output = output;
+		this.debugger = output;
 
-		scheduler.startAsyncRepeatingTask(new Runnable() {
+		scheduler.startAsyncRepeatingTask(new Runnable()
+		{
 			@Override
-			public void run() {
+			public void run()
+			{
 				saveLoadedBanks();
 			}
 		}, 60, 60);
@@ -33,13 +35,13 @@ public class BankHandler implements IPluginDisabled
 			this.loadBank(ownerName);
 
 		viewer.openInventory(this.loadedBanks.get(ownerName));
-		this.output.fine(String.format("Opening %s's bank for %s", ownerName, viewer.getName()));
+		debugger.debugFine(String.format("Opening %s's bank for %s", ownerName, viewer.getName()));
 	}
 
 	private void loadBank(String ownerName)
 	{
-		this.loadedBanks.put(ownerName, bankRepository.get(ownerName));
-		this.output.fine("Loaded bank from database for " + ownerName);
+		loadedBanks.put(ownerName, bankRepository.get(ownerName));
+		debugger.debugFine("Loaded bank from database for " + ownerName);
 	}
 
 	private void saveLoadedBanks()
@@ -50,7 +52,7 @@ public class BankHandler implements IPluginDisabled
 			RunsafeInventory bankInventory = bank.getValue();
 			String ownerName = bank.getKey();
 			this.bankRepository.update(ownerName, bankInventory);
-			this.output.fine("Saved bank to database: " + ownerName);
+			this.debugger.debugFine("Saved bank to database: " + ownerName);
 
 			if (bankInventory.getViewers().isEmpty())
 				oldBanks.add(ownerName);
@@ -59,7 +61,7 @@ public class BankHandler implements IPluginDisabled
 		for (String ownerName : oldBanks)
 		{
 			this.loadedBanks.remove(ownerName);
-			this.output.fine("Removing silent bank reference for GC: " + ownerName);
+			this.debugger.debugFine("Removing silent bank reference for GC: " + ownerName);
 		}
 	}
 
@@ -78,12 +80,12 @@ public class BankHandler implements IPluginDisabled
 	@Override
 	public void OnPluginDisabled()
 	{
-		this.output.write("Shutdown detected, forcing save of all loaded banks.");
+		this.debugger.logInformation("Shutdown detected, forcing save of all loaded banks.");
 		this.forceBanksShut();
 		this.saveLoadedBanks();
 	}
 
 	private HashMap<String, RunsafeInventory> loadedBanks = new HashMap<String, RunsafeInventory>();
 	private BankRepository bankRepository;
-	private IOutput output;
+	private IDebug debugger;
 }
