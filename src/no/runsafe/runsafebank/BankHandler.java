@@ -3,8 +3,8 @@ package no.runsafe.runsafebank;
 import no.runsafe.framework.api.IDebug;
 import no.runsafe.framework.api.IScheduler;
 import no.runsafe.framework.api.event.plugin.IPluginDisabled;
+import no.runsafe.framework.api.player.IPlayer;
 import no.runsafe.framework.minecraft.inventory.RunsafeInventory;
-import no.runsafe.framework.minecraft.player.RunsafePlayer;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,7 +28,7 @@ public class BankHandler implements IPluginDisabled
 		}, 60, 60);
 	}
 
-	public void openBank(RunsafePlayer viewer, RunsafePlayer owner)
+	public void openBank(IPlayer viewer, IPlayer owner)
 	{
 		String ownerName = owner.getName();
 		if (!this.loadedBanks.containsKey(ownerName))
@@ -69,7 +69,7 @@ public class BankHandler implements IPluginDisabled
 	{
 		for (Map.Entry<String, RunsafeInventory> bank : this.loadedBanks.entrySet())
 		{
-			for (RunsafePlayer viewer : bank.getValue().getViewers())
+			for (IPlayer viewer : bank.getValue().getViewers())
 			{
 				viewer.sendColouredMessage("&cServer restarting, you have been forced out of your bank.");
 				viewer.closeInventory();
