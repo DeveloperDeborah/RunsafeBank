@@ -1,8 +1,8 @@
 package no.runsafe.runsafebank;
 
+import no.runsafe.framework.api.IServer;
 import no.runsafe.framework.api.database.IDatabase;
 import no.runsafe.framework.api.database.Repository;
-import no.runsafe.framework.minecraft.RunsafeServer;
 import no.runsafe.framework.minecraft.inventory.RunsafeInventory;
 
 import java.util.ArrayList;
@@ -11,9 +11,10 @@ import java.util.List;
 
 public class BankRepository extends Repository
 {
-	public BankRepository(IDatabase database)
+	public BankRepository(IDatabase database, IServer server)
 	{
 		this.database = database;
+		this.server = server;
 	}
 
 	@Override
@@ -24,7 +25,7 @@ public class BankRepository extends Repository
 
 	public RunsafeInventory get(String playerName)
 	{
-		RunsafeInventory inventory = RunsafeServer.Instance.createInventory(null, 54, String.format("%s's Bank Vault", playerName));
+		RunsafeInventory inventory = server.createInventory(null, 54, String.format("%s's Bank Vault", playerName));
 
 		String serialized = database.QueryString(
 			"SELECT bankInventory FROM runsafeBanks WHERE playerName=?",
@@ -64,4 +65,5 @@ public class BankRepository extends Repository
 	}
 
 	private IDatabase database;
+	private final IServer server;
 }
