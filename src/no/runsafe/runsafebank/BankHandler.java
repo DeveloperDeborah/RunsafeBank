@@ -2,6 +2,7 @@ package no.runsafe.runsafebank;
 
 import no.runsafe.framework.api.IScheduler;
 import no.runsafe.framework.api.event.plugin.IPluginDisabled;
+import no.runsafe.framework.api.log.IConsole;
 import no.runsafe.framework.api.log.IDebug;
 import no.runsafe.framework.api.player.IPlayer;
 import no.runsafe.framework.minecraft.inventory.RunsafeInventory;
@@ -13,10 +14,11 @@ import java.util.Map;
 
 public class BankHandler implements IPluginDisabled
 {
-	public BankHandler(BankRepository bankRepository, IDebug output, IScheduler scheduler)
+	public BankHandler(BankRepository bankRepository, IDebug output, IScheduler scheduler, IConsole console)
 	{
 		this.bankRepository = bankRepository;
 		this.debugger = output;
+		this.console = console;
 
 		scheduler.startAsyncRepeatingTask(new Runnable()
 		{
@@ -80,7 +82,7 @@ public class BankHandler implements IPluginDisabled
 	@Override
 	public void OnPluginDisabled()
 	{
-		this.debugger.logInformation("Shutdown detected, forcing save of all loaded banks.");
+		this.console.logInformation("Shutdown detected, forcing save of all loaded banks.");
 		this.forceBanksShut();
 		this.saveLoadedBanks();
 	}
@@ -88,4 +90,5 @@ public class BankHandler implements IPluginDisabled
 	private HashMap<String, RunsafeInventory> loadedBanks = new HashMap<String, RunsafeInventory>();
 	private BankRepository bankRepository;
 	private IDebug debugger;
+	private IConsole console;
 }
