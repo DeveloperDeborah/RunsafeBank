@@ -27,7 +27,7 @@ public class BankRepository extends Repository
 	{
 		RunsafeInventory inventory = server.createInventory(null, 54, String.format("%s's Bank Vault", playerName));
 
-		String serialized = database.QueryString(
+		String serialized = database.queryString(
 			"SELECT bankInventory FROM runsafeBanks WHERE playerName=?",
 			playerName
 		);
@@ -40,7 +40,7 @@ public class BankRepository extends Repository
 	public void update(String bankOwner, RunsafeInventory inventory)
 	{
 		String inventoryString = inventory.serialize();
-		database.Execute(
+		database.execute(
 			"INSERT INTO `runsafeBanks` (playerName, bankInventory) VALUES(?,?) " +
 				"ON DUPLICATE KEY UPDATE bankInventory = ?",
 			bankOwner, inventoryString, inventoryString
