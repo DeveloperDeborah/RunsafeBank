@@ -1,8 +1,8 @@
 package no.runsafe.runsafebank.commands;
 
 import no.runsafe.framework.api.IServer;
+import no.runsafe.framework.api.command.argument.AnyPlayerRequired;
 import no.runsafe.framework.api.command.argument.IArgumentList;
-import no.runsafe.framework.api.command.argument.PlayerArgument;
 import no.runsafe.framework.api.command.player.PlayerCommand;
 import no.runsafe.framework.api.player.IPlayer;
 import no.runsafe.runsafebank.BankHandler;
@@ -13,7 +13,7 @@ public class ViewBank extends PlayerCommand
 	{
 		super(
 			"viewbank", "Opens a players bank", "runsafe.bank.view",
-			new PlayerArgument()
+			new AnyPlayerRequired()
 		);
 		this.bankHandler = bankHandler;
 		this.server = server;
