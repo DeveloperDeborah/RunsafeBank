@@ -9,9 +9,8 @@ import no.runsafe.framework.minecraft.inventory.RunsafeInventory;
 
 public class BankRepository extends Repository
 {
-	public BankRepository(IDatabase database, IServer server)
+	public BankRepository(IServer server)
 	{
-		this.database = database;
 		this.server = server;
 	}
 
@@ -61,6 +60,5 @@ public class BankRepository extends Repository
 		return update;
 	}
 
-	private IDatabase database;
 	private final IServer server;
 }
