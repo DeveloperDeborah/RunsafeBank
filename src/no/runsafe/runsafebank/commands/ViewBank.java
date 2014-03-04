@@ -12,7 +12,7 @@ public class ViewBank extends PlayerCommand
 	{
 		super(
 			"viewbank", "Opens a players bank", "runsafe.bank.view",
-			new Player.Any().require()
+			new Player().require()
 		);
 		this.bankHandler = bankHandler;
 	}
