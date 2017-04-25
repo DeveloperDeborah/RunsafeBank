@@ -34,16 +34,16 @@ public class BankHandler implements IPluginDisabled
 	{
 		String ownerName = owner.getName();
 		if (!this.loadedBanks.containsKey(ownerName))
-			this.loadBank(ownerName);
+			this.loadBank(owner);
 
 		viewer.openInventory(this.loadedBanks.get(ownerName));
 		debugger.debugFine(String.format("Opening %s's bank for %s", ownerName, viewer.getName()));
 	}
 
-	private void loadBank(String ownerName)
+	private void loadBank(IPlayer owner)
 	{
-		loadedBanks.put(ownerName, bankRepository.get(ownerName));
-		debugger.debugFine("Loaded bank from database for " + ownerName);
+		loadedBanks.put(owner.getName(), bankRepository.get(owner));
+		debugger.debugFine("Loaded bank from database for " + owner.getName());
 	}
 
 	private void saveLoadedBanks()

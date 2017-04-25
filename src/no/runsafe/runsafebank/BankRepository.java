@@ -5,6 +5,7 @@ import no.runsafe.framework.api.database.IDatabase;
 import no.runsafe.framework.api.database.ISchemaUpdate;
 import no.runsafe.framework.api.database.Repository;
 import no.runsafe.framework.api.database.SchemaUpdate;
+import no.runsafe.framework.api.player.IPlayer;
 import no.runsafe.framework.minecraft.inventory.RunsafeInventory;
 
 public class BankRepository extends Repository
@@ -20,8 +21,9 @@ public class BankRepository extends Repository
 		return "runsafeBanks";
 	}
 
-	public RunsafeInventory get(String playerName)
+	public RunsafeInventory get(IPlayer player)
 	{
+		String playerName = player.getName();
 		RunsafeInventory inventory = server.createInventory(null, 54, String.format("%s's Bank Vault", playerName));
 
 		String serialized = database.queryString(
