@@ -8,6 +8,8 @@ import no.runsafe.framework.api.database.SchemaUpdate;
 import no.runsafe.framework.api.player.IPlayer;
 import no.runsafe.framework.minecraft.inventory.RunsafeInventory;
 
+import java.util.UUID;
+
 public class BankRepository extends Repository
 {
 	public BankRepository(IServer server)
@@ -36,13 +38,14 @@ public class BankRepository extends Repository
 		return inventory;
 	}
 
-	public void update(String bankOwner, RunsafeInventory inventory)
+	public void update(UUID bankOwner, RunsafeInventory inventory)
 	{
+		String ownerName = server.getPlayer(bankOwner).getName();
 		String inventoryString = inventory.serialize();
 		database.execute(
 			"INSERT INTO `runsafeBanks` (playerName, bankInventory) VALUES(?,?) " +
 				"ON DUPLICATE KEY UPDATE bankInventory = ?",
-			bankOwner, inventoryString, inventoryString
+			ownerName, inventoryString, inventoryString
 		);
 	}
 

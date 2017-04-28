@@ -1,6 +1,7 @@
 package no.runsafe.runsafebank;
 
 import no.runsafe.framework.api.IScheduler;
+import no.runsafe.framework.api.IServer;
 import no.runsafe.framework.api.event.plugin.IPluginDisabled;
 import no.runsafe.framework.api.log.IConsole;
 import no.runsafe.framework.api.log.IDebug;
@@ -8,17 +9,19 @@ import no.runsafe.framework.api.player.IPlayer;
 import no.runsafe.framework.minecraft.inventory.RunsafeInventory;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.UUID;
 import java.util.List;
 import java.util.Map;
 
 public class BankHandler implements IPluginDisabled
 {
-	public BankHandler(BankRepository bankRepository, IDebug output, IScheduler scheduler, IConsole console)
+	public BankHandler(BankRepository bankRepository, IDebug output, IScheduler scheduler, IConsole console, IServer server)
 	{
 		this.bankRepository = bankRepository;
 		this.debugger = output;
 		this.console = console;
+		this.server = server;
 
 		scheduler.startAsyncRepeatingTask(new Runnable()
 		{
@@ -32,44 +35,47 @@ public class BankHandler implements IPluginDisabled
 
 	public void openBank(IPlayer viewer, IPlayer owner)
 	{
-		String ownerName = owner.getName();
-		if (!this.loadedBanks.containsKey(ownerName))
+		UUID ownerUUID = owner.getUniqueId();
+		if (!this.loadedBanks.containsKey(ownerUUID))
 			this.loadBank(owner);
 
-		viewer.openInventory(this.loadedBanks.get(ownerName));
-		debugger.debugFine(String.format("Opening %s's bank for %s", ownerName, viewer.getName()));
+		viewer.openInventory(this.loadedBanks.get(ownerUUID));
+		debugger.debugFine(String.format("Opening %s's bank for %s", owner.getName(), viewer.getName()));
 	}
 
 	private void loadBank(IPlayer owner)
 	{
-		loadedBanks.put(owner.getName(), bankRepository.get(owner));
+		loadedBanks.put(owner.getUniqueId(), bankRepository.get(owner));
 		debugger.debugFine("Loaded bank from database for " + owner.getName());
 	}
 
 	private void saveLoadedBanks()
 	{
-		List<String> oldBanks = new ArrayList<String>();
-		for (Map.Entry<String, RunsafeInventory> bank : this.loadedBanks.entrySet())
+		List<UUID> oldBanks = new ArrayList<UUID>();
+		for (Map.Entry<UUID, RunsafeInventory> bank : this.loadedBanks.entrySet())
 		{
 			RunsafeInventory bankInventory = bank.getValue();
-			String ownerName = bank.getKey();
-			this.bankRepository.update(ownerName, bankInventory);
+			UUID ownerUUID = bank.getKey();
+			this.bankRepository.update(ownerUUID, bankInventory);
+
+			String ownerName = server.getPlayer(ownerUUID).getName();
 			this.debugger.debugFine("Saved bank to database: " + ownerName);
 
 			if (bankInventory.getViewers().isEmpty())
-				oldBanks.add(ownerName);
+				oldBanks.add(ownerUUID);
 		}
 
-		for (String ownerName : oldBanks)
+		for (UUID ownerUUID : oldBanks)
 		{
-			this.loadedBanks.remove(ownerName);
+			this.loadedBanks.remove(ownerUUID);
+			String ownerName = server.getPlayer(ownerUUID).getName();
 			this.debugger.debugFine("Removing silent bank reference for GC: " + ownerName);
 		}
 	}
 
 	private void forceBanksShut()
 	{
-		for (Map.Entry<String, RunsafeInventory> bank : this.loadedBanks.entrySet())
+		for (Map.Entry<UUID, RunsafeInventory> bank : this.loadedBanks.entrySet())
 		{
 			for (IPlayer viewer : bank.getValue().getViewers())
 			{
@@ -87,8 +93,9 @@ public class BankHandler implements IPluginDisabled
 		this.saveLoadedBanks();
 	}
 
-	private HashMap<String, RunsafeInventory> loadedBanks = new HashMap<String, RunsafeInventory>();
+	private ConcurrentHashMap<UUID, RunsafeInventory> loadedBanks = new ConcurrentHashMap<UUID, RunsafeInventory>();
 	private BankRepository bankRepository;
 	private IDebug debugger;
 	private IConsole console;
+	private final IServer server;
 }
