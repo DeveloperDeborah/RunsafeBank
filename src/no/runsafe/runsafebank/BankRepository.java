@@ -26,12 +26,11 @@ public class BankRepository extends Repository
 
 	public RunsafeInventory get(IPlayer player)
 	{
-		String playerName = player.getName();
-		RunsafeInventory inventory = server.createInventory(null, 54, String.format("%s's Bank Vault", playerName));
+		RunsafeInventory inventory = server.createInventory(null, 54, String.format("%s's Bank Vault", player.getName()));
 
 		String serialized = database.queryString(
 			"SELECT bankInventory FROM runsafeBanks WHERE player=?",
-			playerName
+			player.getUniqueId().toString()
 		);
 		if (serialized != null)
 			inventory.unserialize(serialized);
@@ -41,12 +40,11 @@ public class BankRepository extends Repository
 
 	public void update(UUID bankOwner, RunsafeInventory inventory)
 	{
-		String ownerName = server.getPlayer(bankOwner).getName();
 		String inventoryString = inventory.serialize();
 		database.execute(
 			"INSERT INTO `runsafeBanks` (player, bankInventory) VALUES(?,?) " +
 				"ON DUPLICATE KEY UPDATE bankInventory = ?",
-			ownerName, inventoryString, inventoryString
+			bankOwner, inventoryString, inventoryString
 		);
 	}
 
@@ -64,6 +62,18 @@ public class BankRepository extends Repository
 			")"
 		);
 		update.addQueries("ALTER TABLE `runsafeBanks` CHANGE `playerName` `player` varchar(50) NOT NULL");
+
+		// Clean up empty banks before updating UUIDs to reduce issues.
+		update.addQueries(String.format("DELETE FROM `%s` where `bankInventory` = 'contents: {}\n'", getTableName()));
+
+		update.addQueries( // Update UUIDs
+			String.format(
+				"UPDATE IGNORE `%s` SET `player` = " +
+					"COALESCE((SELECT `uuid` FROM player_db WHERE `name`=`%s`.`player`), `player`) " +
+					"WHERE length(`player`) != 36",
+				getTableName(), getTableName()
+			)
+		);
 
 		return update;
 	}
