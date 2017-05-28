@@ -7,6 +7,7 @@ import no.runsafe.framework.api.database.SchemaUpdate;
 import no.runsafe.framework.api.player.IPlayer;
 import no.runsafe.framework.minecraft.inventory.RunsafeInventory;
 
+import javax.annotation.Nonnull;
 import java.util.UUID;
 
 public class BankRepository extends Repository
@@ -16,6 +17,7 @@ public class BankRepository extends Repository
 		this.server = server;
 	}
 
+	@Nonnull
 	@Override
 	public String getTableName()
 	{
@@ -48,6 +50,7 @@ public class BankRepository extends Repository
 		);
 	}
 
+	@Nonnull
 	@Override
 	public ISchemaUpdate getSchemaUpdateQueries()
 	{
