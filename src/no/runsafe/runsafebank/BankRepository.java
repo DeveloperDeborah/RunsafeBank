@@ -28,7 +28,7 @@ public class BankRepository extends Repository
 		RunsafeInventory inventory = server.createInventory(null, 54, String.format("%s's Bank Vault", playerName));
 
 		String serialized = database.queryString(
-			"SELECT bankInventory FROM runsafeBanks WHERE playerName=?",
+			"SELECT bankInventory FROM runsafeBanks WHERE player=?",
 			playerName
 		);
 		if (serialized != null)
@@ -42,7 +42,7 @@ public class BankRepository extends Repository
 		String ownerName = server.getPlayer(bankOwner).getName();
 		String inventoryString = inventory.serialize();
 		database.execute(
-			"INSERT INTO `runsafeBanks` (playerName, bankInventory) VALUES(?,?) " +
+			"INSERT INTO `runsafeBanks` (player, bankInventory) VALUES(?,?) " +
 				"ON DUPLICATE KEY UPDATE bankInventory = ?",
 			ownerName, inventoryString, inventoryString
 		);
@@ -60,6 +60,7 @@ public class BankRepository extends Repository
 				"PRIMARY KEY (`playerName`)" +
 			")"
 		);
+		update.addQueries("ALTER TABLE `runsafeBanks` CHANGE `playerName` `player` varchar(50) NOT NULL");
 
 		return update;
 	}
