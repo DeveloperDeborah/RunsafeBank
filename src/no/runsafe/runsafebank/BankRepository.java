@@ -38,13 +38,13 @@ public class BankRepository extends Repository
 		return inventory;
 	}
 
-	public void update(UUID bankOwner, RunsafeInventory inventory)
+	public void update(IPlayer bankOwner, RunsafeInventory inventory)
 	{
 		String inventoryString = inventory.serialize();
 		database.execute(
 			"INSERT INTO `runsafeBanks` (player, bankInventory) VALUES(?,?) " +
 				"ON DUPLICATE KEY UPDATE bankInventory = ?",
-			bankOwner, inventoryString, inventoryString
+			bankOwner.getUniqueId().toString(), inventoryString, inventoryString
 		);
 	}
 

@@ -56,7 +56,7 @@ public class BankHandler implements IPluginDisabled
 		{
 			RunsafeInventory bankInventory = bank.getValue();
 			UUID ownerUUID = bank.getKey();
-			this.bankRepository.update(ownerUUID, bankInventory);
+			this.bankRepository.update(server.getPlayer(ownerUUID), bankInventory);
 
 			String ownerName = server.getPlayer(ownerUUID).getName();
 			this.debugger.debugFine("Saved bank to database: " + ownerName);
