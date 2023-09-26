@@ -1,0 +1,32 @@
+package no.runsafe.runsafebank.commands;
+
+import no.runsafe.framework.api.command.ExecutableCommand;
+import no.runsafe.framework.api.command.ICommandExecutor;
+import no.runsafe.framework.api.command.argument.IArgumentList;
+import no.runsafe.framework.api.command.argument.Player;
+import no.runsafe.framework.api.player.IPlayer;
+import no.runsafe.runsafebank.BankHandler;
+
+public class ClearBank extends ExecutableCommand
+{
+    public ClearBank(BankHandler bankHandler)
+    {
+        super(
+            "clearbank", "Deletes a player's bank.", "runsafe.bank.clear",
+            new Player().require()
+        );
+        this.bankHandler = bankHandler;
+    }
+
+    @Override
+    public String OnExecute(ICommandExecutor executor, IArgumentList parameters)
+    {
+        IPlayer bankOwner = parameters.getValue("player");
+        if(bankOwner == null)
+            return null;
+
+        bankHandler.clearBank(bankOwner);
+        return String.format("&cDeleted bank for %s&c.", bankOwner.getPrettyName());
+    }
+    private BankHandler bankHandler;
+}

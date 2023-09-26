@@ -5,6 +5,7 @@ import no.runsafe.framework.features.Commands;
 import no.runsafe.framework.features.Database;
 import no.runsafe.framework.features.Events;
 import no.runsafe.runsafebank.commands.ViewBank;
+import no.runsafe.runsafebank.commands.ClearBank;
 import no.runsafe.runsafebank.events.Interact;
 
 public class Plugin extends RunsafePlugin
@@ -22,5 +23,6 @@ public class Plugin extends RunsafePlugin
 		addComponent(BankHandler.class);
 		addComponent(BankRepository.class);
 		addComponent(ViewBank.class);
+		addComponent(ClearBank.class);
 	}
 }

@@ -48,6 +48,13 @@ public class BankRepository extends Repository
 		);
 	}
 
+	public void clear(IPlayer bankOwner)
+	{
+		database.execute("DELETE FROM `runsafeBanks` WHERE `player` = ?",
+			bankOwner.getUniqueId().toString()
+		);
+	}
+
 	@Nonnull
 	@Override
 	public ISchemaUpdate getSchemaUpdateQueries()
