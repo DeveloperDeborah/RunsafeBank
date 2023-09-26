@@ -40,6 +40,13 @@ public class BankHandler implements IPluginDisabled
 		debugger.debugFine(String.format("Opening %s's bank for %s", owner.getName(), viewer.getName()));
 	}
 
+	public void clearBank(IPlayer bankOwner)
+	{
+		loadedBanks.remove(bankOwner);
+		bankRepository.clear(bankOwner);
+		debugger.debugFine(String.format("Deleted %s's bank", bankOwner.getName()));
+	}
+
 	private void loadBank(IPlayer owner)
 	{
 		loadedBanks.put(owner, bankRepository.get(owner));

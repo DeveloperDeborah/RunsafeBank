@@ -7,3 +7,5 @@ description:
 commands:
   viewbank:
     description: Opens a players bank
+  clearbank:
+    description: Deletes a players bank
