@@ -60,11 +60,12 @@ public class BankHandler implements IPluginDisabled, IConfigurationChanged
 		{
 			RunsafeInventory bankInventory = bank.getValue();
 			IPlayer bankOwner = bank.getKey();
-			if (bankInventory.serialize().length() > maxBankDataSize)
+			int bankDataSize = bankInventory.serialize().length();
+			if (bankDataSize > maxBankDataSize)
 			{
 				this.console.logInformation(
 					"Player attempted to exceed size limit of bank. Player: " + bankOwner.getName() +
-					" Size: " + bankInventory.serialize().length()
+					" Size: " + bankDataSize
 				);
 				this.debugger.debugFine("Bank inv size too big. Could not save bank for: " + bankOwner.getName());
 				continue;
