@@ -30,5 +30,5 @@ public class Interact implements IPlayerInteractEvent
 		}
 	}
 
-	private BankHandler bankHandler;
+	private final BankHandler bankHandler;
 }

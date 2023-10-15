@@ -1,7 +1,6 @@
 package no.runsafe.runsafebank;
 
 import no.runsafe.framework.api.IScheduler;
-import no.runsafe.framework.api.IServer;
 import no.runsafe.framework.api.event.plugin.IPluginDisabled;
 import no.runsafe.framework.api.log.IConsole;
 import no.runsafe.framework.api.log.IDebug;
@@ -21,14 +20,7 @@ public class BankHandler implements IPluginDisabled
 		this.debugger = output;
 		this.console = console;
 
-		scheduler.startAsyncRepeatingTask(new Runnable()
-		{
-			@Override
-			public void run()
-			{
-				saveLoadedBanks();
-			}
-		}, 60, 60);
+		scheduler.startAsyncRepeatingTask(this::saveLoadedBanks, 60, 60);
 	}
 
 	public void openBank(IPlayer viewer, IPlayer owner)
@@ -95,8 +87,8 @@ public class BankHandler implements IPluginDisabled
 		this.saveLoadedBanks();
 	}
 
-	private ConcurrentHashMap<IPlayer, RunsafeInventory> loadedBanks = new ConcurrentHashMap<>();
-	private BankRepository bankRepository;
-	private IDebug debugger;
-	private IConsole console;
+	private final ConcurrentHashMap<IPlayer, RunsafeInventory> loadedBanks = new ConcurrentHashMap<>();
+	private final BankRepository bankRepository;
+	private final IDebug debugger;
+	private final IConsole console;
 }

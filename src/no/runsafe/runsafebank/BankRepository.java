@@ -8,7 +8,6 @@ import no.runsafe.framework.api.player.IPlayer;
 import no.runsafe.framework.minecraft.inventory.RunsafeInventory;
 
 import javax.annotation.Nonnull;
-import java.util.UUID;
 
 public class BankRepository extends Repository
 {

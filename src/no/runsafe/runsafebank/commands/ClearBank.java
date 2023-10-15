@@ -28,5 +28,5 @@ public class ClearBank extends ExecutableCommand
         bankHandler.clearBank(bankOwner);
         return String.format("&cDeleted bank for %s&c.", bankOwner.getPrettyName());
     }
-    private BankHandler bankHandler;
+    private final BankHandler bankHandler;
 }
