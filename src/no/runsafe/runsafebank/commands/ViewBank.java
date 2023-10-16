@@ -26,5 +26,5 @@ public class ViewBank extends PlayerCommand
 		return null;
 	}
 
-	private BankHandler bankHandler;
+	private final BankHandler bankHandler;
 }

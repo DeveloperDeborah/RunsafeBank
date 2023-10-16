@@ -1,7 +1,8 @@
 package no.runsafe.runsafebank;
 
+import no.runsafe.framework.api.IConfiguration;
 import no.runsafe.framework.api.IScheduler;
-import no.runsafe.framework.api.IServer;
+import no.runsafe.framework.api.event.plugin.IConfigurationChanged;
 import no.runsafe.framework.api.event.plugin.IPluginDisabled;
 import no.runsafe.framework.api.log.IConsole;
 import no.runsafe.framework.api.log.IDebug;
@@ -13,7 +14,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.List;
 import java.util.Map;
 
-public class BankHandler implements IPluginDisabled
+public class BankHandler implements IPluginDisabled, IConfigurationChanged
 {
 	public BankHandler(BankRepository bankRepository, IDebug output, IScheduler scheduler, IConsole console)
 	{
@@ -21,14 +22,13 @@ public class BankHandler implements IPluginDisabled
 		this.debugger = output;
 		this.console = console;
 
-		scheduler.startAsyncRepeatingTask(new Runnable()
-		{
-			@Override
-			public void run()
-			{
-				saveLoadedBanks();
-			}
-		}, 60, 60);
+		scheduler.startAsyncRepeatingTask(this::saveLoadedBanks, 60, 60);
+	}
+
+	@Override
+	public void OnConfigurationChanged(IConfiguration config)
+	{
+		this.maxBankDataSize = config.getConfigValueAsInt("maxBankDataSize");
 	}
 
 	public void openBank(IPlayer viewer, IPlayer owner)
@@ -60,6 +60,17 @@ public class BankHandler implements IPluginDisabled
 		{
 			RunsafeInventory bankInventory = bank.getValue();
 			IPlayer bankOwner = bank.getKey();
+			int bankDataSize = bankInventory.serialize().length();
+			if (bankDataSize > maxBankDataSize)
+			{
+				this.console.logInformation(
+					"Player attempted to exceed size limit of bank. Player: " + bankOwner.getName() +
+					" Size: " + bankDataSize
+				);
+				this.debugger.debugFine("Bank inv size too big. Could not save bank for: " + bankOwner.getName());
+				continue;
+			}
+
 			this.bankRepository.update(bankOwner, bankInventory);
 
 			this.debugger.debugFine("Saved bank to database: " + bankOwner.getName());
@@ -95,8 +106,9 @@ public class BankHandler implements IPluginDisabled
 		this.saveLoadedBanks();
 	}
 
-	private ConcurrentHashMap<IPlayer, RunsafeInventory> loadedBanks = new ConcurrentHashMap<>();
-	private BankRepository bankRepository;
-	private IDebug debugger;
-	private IConsole console;
+	private int maxBankDataSize;
+	private final ConcurrentHashMap<IPlayer, RunsafeInventory> loadedBanks = new ConcurrentHashMap<>();
+	private final BankRepository bankRepository;
+	private final IDebug debugger;
+	private final IConsole console;
 }
