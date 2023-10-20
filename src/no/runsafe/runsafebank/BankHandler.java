@@ -29,6 +29,7 @@ public class BankHandler implements IPluginDisabled, IConfigurationChanged
 	public void OnConfigurationChanged(IConfiguration config)
 	{
 		this.maxBankDataSize = config.getConfigValueAsInt("maxBankDataSize");
+		this.overloadedWarningMessage = config.getConfigValueAsString("overloadedWarningMessage");
 	}
 
 	public void openBank(IPlayer viewer, IPlayer owner)
@@ -86,7 +87,7 @@ public class BankHandler implements IPluginDisabled, IConfigurationChanged
 
 		for (IPlayer suspect: suspiciousBanks)
 		{
-			suspect.sendColouredMessage("&cAttempted to exceed bank storage size. Contact a staff member for more information.");
+			suspect.sendColouredMessage(overloadedWarningMessage);
 			suspect.closeInventory();
 			loadedBanks.remove(suspect);
 		}
@@ -118,6 +119,7 @@ public class BankHandler implements IPluginDisabled, IConfigurationChanged
 		this.saveLoadedBanks();
 	}
 
+	private String overloadedWarningMessage;
 	private int maxBankDataSize;
 	private final ConcurrentHashMap<IPlayer, RunsafeInventory> loadedBanks = new ConcurrentHashMap<>();
 	private final BankRepository bankRepository;

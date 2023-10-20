@@ -1,3 +1,4 @@
 maxBankDataSize: 1000000
+overloadedWarningMessage: "&cAttempted to exceed bank storage size. Contact a staff member for more information."
 worlds:
   - survival3
