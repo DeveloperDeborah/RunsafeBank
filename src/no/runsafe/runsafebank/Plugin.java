@@ -2,6 +2,7 @@ package no.runsafe.runsafebank;
 
 import no.runsafe.framework.RunsafePlugin;
 import no.runsafe.framework.features.Commands;
+import no.runsafe.framework.features.Configuration;
 import no.runsafe.framework.features.Database;
 import no.runsafe.framework.features.Events;
 import no.runsafe.runsafebank.commands.ViewBank;
@@ -17,6 +18,7 @@ public class Plugin extends RunsafePlugin
 		addComponent(Commands.class);
 		addComponent(Events.class);
 		addComponent(Database.class);
+		addComponent(Configuration.class);
 
 		// Plugin components
 		addComponent(Interact.class);

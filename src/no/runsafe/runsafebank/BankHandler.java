@@ -29,6 +29,7 @@ public class BankHandler implements IPluginDisabled, IConfigurationChanged
 	public void OnConfigurationChanged(IConfiguration config)
 	{
 		this.maxBankDataSize = config.getConfigValueAsInt("maxBankDataSize");
+		this.overloadedWarningMessage = config.getConfigValueAsString("overloadedWarningMessage");
 	}
 
 	public void openBank(IPlayer viewer, IPlayer owner)
@@ -56,6 +57,7 @@ public class BankHandler implements IPluginDisabled, IConfigurationChanged
 	private void saveLoadedBanks()
 	{
 		List<IPlayer> oldBanks = new ArrayList<>();
+		List<IPlayer> suspiciousBanks = new ArrayList<>();
 		for (Map.Entry<IPlayer, RunsafeInventory> bank : this.loadedBanks.entrySet())
 		{
 			RunsafeInventory bankInventory = bank.getValue();
@@ -67,7 +69,11 @@ public class BankHandler implements IPluginDisabled, IConfigurationChanged
 					"Player attempted to exceed size limit of bank. Player: " + bankOwner.getName() +
 					" Size: " + bankDataSize
 				);
-				this.debugger.debugFine("Bank inv size too big. Could not save bank for: " + bankOwner.getName());
+				this.debugger.debugFine(
+					"Bank inv size too big. Could not save bank for: " + bankOwner.getName() +
+					" Size: " + bankDataSize
+				);
+				suspiciousBanks.add(bankOwner);
 				continue;
 			}
 
@@ -77,6 +83,13 @@ public class BankHandler implements IPluginDisabled, IConfigurationChanged
 
 			if (bankInventory.getViewers().isEmpty())
 				oldBanks.add(bankOwner);
+		}
+
+		for (IPlayer suspect: suspiciousBanks)
+		{
+			suspect.sendColouredMessage(overloadedWarningMessage);
+			suspect.closeInventory();
+			loadedBanks.remove(suspect);
 		}
 
 		for (IPlayer owner: oldBanks)
@@ -106,6 +119,7 @@ public class BankHandler implements IPluginDisabled, IConfigurationChanged
 		this.saveLoadedBanks();
 	}
 
+	private String overloadedWarningMessage;
 	private int maxBankDataSize;
 	private final ConcurrentHashMap<IPlayer, RunsafeInventory> loadedBanks = new ConcurrentHashMap<>();
 	private final BankRepository bankRepository;
