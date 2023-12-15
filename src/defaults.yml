@@ -2,3 +2,22 @@ maxBankDataSize: 1000000
 overloadedWarningMessage: "&cAttempted to exceed bank storage size. Contact a staff member for more information."
 worlds:
   - survival3
+blacklistedItems:
+  - white shulker box
+  - orange shulker box
+  - magenta shulker box
+  - light blue shulker box
+  - yellow shulker box
+  - lime shulker box
+  - pink shulker box
+  - gray shulker box
+  - silver shulker box
+  - cyan shulker box
+  - purple shulker box
+  - blue shulker box
+  - brown shulker box
+  - green shulker box
+  - red shulker box
+  - black shulker box
+  - command block
+  - structure block
