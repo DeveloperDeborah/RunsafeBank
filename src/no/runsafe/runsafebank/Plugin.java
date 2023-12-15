@@ -19,6 +19,7 @@ public class Plugin extends RunsafeConfigurablePlugin
 		addComponent(Database.class);
 
 		// Plugin components
+		addComponent(Config.class);
 		addComponent(Interact.class);
 		addComponent(BankHandler.class);
 		addComponent(BankRepository.class);
