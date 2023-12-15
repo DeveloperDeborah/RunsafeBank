@@ -20,10 +20,10 @@ public class Inventory implements IInventoryMoveItem
 	@Override
 	public void OnInventoryMoveItemEvent(RunsafeInventoryMoveItemEvent event)
 	{
-		if (!event.getInitiator().getName().contains("'s Bank Vault"))
+		if (!event.getDestination().getName().contains("'s Bank Vault"))
 			return;
 
-		List<IPlayer> viewers = event.getInitiator().getViewers();
+		List<IPlayer> viewers = event.getDestination().getViewers();
 		if (!bankHandler.isViewingBank(viewers)) // Double check someone didn't name a random chest "'s Bank Vault"
 			return;
 
