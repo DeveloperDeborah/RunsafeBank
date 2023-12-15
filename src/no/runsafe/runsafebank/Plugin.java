@@ -7,6 +7,7 @@ import no.runsafe.framework.features.Events;
 import no.runsafe.runsafebank.commands.ViewBank;
 import no.runsafe.runsafebank.commands.ClearBank;
 import no.runsafe.runsafebank.events.Interact;
+import no.runsafe.runsafebank.events.Inventory;
 
 public class Plugin extends RunsafeConfigurablePlugin
 {
@@ -21,6 +22,7 @@ public class Plugin extends RunsafeConfigurablePlugin
 		// Plugin components
 		addComponent(Config.class);
 		addComponent(Interact.class);
+		addComponent(Inventory.class);
 		addComponent(BankHandler.class);
 		addComponent(BankRepository.class);
 		addComponent(ViewBank.class);

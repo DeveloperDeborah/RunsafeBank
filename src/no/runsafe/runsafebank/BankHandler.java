@@ -39,6 +39,20 @@ public class BankHandler implements IPluginDisabled
 		debugger.debugFine(String.format("Deleted %s's bank", bankOwner.getName()));
 	}
 
+	public boolean isViewingBank(List<IPlayer> inventoryViewers)
+	{
+		if (loadedBanks.isEmpty() || inventoryViewers == null || inventoryViewers.isEmpty())
+			return false;
+
+		for (Map.Entry<IPlayer, RunsafeInventory> bank : this.loadedBanks.entrySet())
+			for (IPlayer bankViewer : bank.getValue().getViewers())
+				for (IPlayer inventoryViewer : inventoryViewers)
+					if (bankViewer.equals(inventoryViewer))
+						return true;
+
+		return false;
+	}
+
 	private void loadBank(IPlayer owner)
 	{
 		loadedBanks.put(owner, bankRepository.get(owner));
