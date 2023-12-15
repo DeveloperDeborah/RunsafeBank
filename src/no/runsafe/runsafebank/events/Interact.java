@@ -25,9 +25,9 @@ public class Interact implements IPlayerInteractEvent
 		IPlayer player = event.getPlayer();
 
 		if (!player.hasPermission("runsafe.bank.use"))
-			player.sendColouredMessage("&cYou do not have permissions to use the bank.");
+			player.sendColouredMessage(Config.Messages.getNoPermissions());
 		else if (!Config.isBankWorld(player.getWorld()))
-			player.sendColouredMessage("&cYou can not use the bank in this world.");
+			player.sendColouredMessage(Config.Messages.getWrongWorld());
 		else this.bankHandler.openBank(player, player);
 
 		event.cancel();

@@ -19,7 +19,13 @@ public class Config implements IConfigurationChanged
 		worlds.addAll(config.getConfigValueAsList("worlds"));
 		blacklistedItems.addAll(config.getConfigValueAsList("blacklistedItems"));
 
-		Messages.overloadedWarning = config.getConfigValueAsString("overloadedWarningMessage");
+		Messages.overloadedWarning = config.getConfigValueAsString("message.overloadedWarning");
+		Messages.noPermissions = config.getConfigValueAsString("message.noPermissions");
+		Messages.wrongWorld = config.getConfigValueAsString("message.wrongWorld");
+		Messages.serverRestarting = config.getConfigValueAsString("message.serverRestarting");
+		Messages.itemNotAllowed = config.getConfigValueAsString("message.itemNotAllowed");
+
+		Messages.commandDeleteBank = config.getConfigValueAsString("message.command.deleteBank");
 	}
 
 	public static final class Messages
@@ -29,7 +35,38 @@ public class Config implements IConfigurationChanged
 			return overloadedWarning;
 		}
 
+		public static String getNoPermissions()
+		{
+			return noPermissions;
+		}
+
+		public static String getWrongWorld()
+		{
+			return wrongWorld;
+		}
+
+		public static String getServerRestarting()
+		{
+			return serverRestarting;
+		}
+
+		public static String getCommandDeleteBank()
+		{
+			return commandDeleteBank;
+		}
+
+		public static String getItemNotAllowed()
+		{
+			return itemNotAllowed;
+		}
+
 		private static String overloadedWarning;
+		private static String noPermissions;
+		private static String wrongWorld;
+		private static String serverRestarting;
+		private static String itemNotAllowed;
+
+		private static String commandDeleteBank;
 	}
 
 	public static int getMaxBankDataSize()

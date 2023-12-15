@@ -96,7 +96,7 @@ public class BankHandler implements IPluginDisabled
 		{
 			for (IPlayer viewer : bank.getValue().getViewers())
 			{
-				viewer.sendColouredMessage("&cServer restarting, you have been forced out of your bank.");
+				viewer.sendColouredMessage(Config.Messages.getServerRestarting());
 				viewer.closeInventory();
 			}
 		}
