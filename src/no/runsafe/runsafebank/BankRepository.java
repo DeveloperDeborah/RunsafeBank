@@ -1,6 +1,5 @@
 package no.runsafe.runsafebank;
 
-import no.runsafe.framework.api.IServer;
 import no.runsafe.framework.api.database.ISchemaUpdate;
 import no.runsafe.framework.api.database.Repository;
 import no.runsafe.framework.api.database.SchemaUpdate;
@@ -11,11 +10,6 @@ import javax.annotation.Nonnull;
 
 public class BankRepository extends Repository
 {
-	public BankRepository(IServer server)
-	{
-		this.server = server;
-	}
-
 	@Nonnull
 	@Override
 	public String getTableName()
@@ -25,7 +19,7 @@ public class BankRepository extends Repository
 
 	public RunsafeInventory get(IPlayer player)
 	{
-		RunsafeInventory inventory = server.createInventory(null, 54, String.format("%s's Bank Vault", player.getName()));
+		RunsafeInventory inventory = Plugin.Server.createInventory(null, 54, String.format("%s's Bank Vault", player.getName()));
 
 		String serialized = database.queryString(
 			"SELECT bankInventory FROM runsafeBanks WHERE player=?",
@@ -83,6 +77,4 @@ public class BankRepository extends Repository
 
 		return update;
 	}
-
-	private final IServer server;
 }

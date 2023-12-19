@@ -6,6 +6,7 @@ import no.runsafe.framework.api.command.argument.IArgumentList;
 import no.runsafe.framework.api.command.argument.Player;
 import no.runsafe.framework.api.player.IPlayer;
 import no.runsafe.runsafebank.BankHandler;
+import no.runsafe.runsafebank.Config;
 
 public class ClearBank extends ExecutableCommand
 {
@@ -26,7 +27,7 @@ public class ClearBank extends ExecutableCommand
             return null;
 
         bankHandler.clearBank(bankOwner);
-        return String.format("&cDeleted bank for %s&c.", bankOwner.getPrettyName());
+        return String.format(Config.Messages.getCommandDeleteBank(), bankOwner.getPrettyName());
     }
     private final BankHandler bankHandler;
 }
