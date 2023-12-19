@@ -8,8 +8,6 @@ import no.runsafe.framework.minecraft.event.inventory.RunsafeInventoryClickEvent
 import no.runsafe.runsafebank.BankHandler;
 import no.runsafe.runsafebank.Config;
 
-import java.util.List;
-
 public class Inventory implements IInventoryClick
 {
 	public Inventory(BankHandler bankHandler)
