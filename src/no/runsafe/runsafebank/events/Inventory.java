@@ -23,23 +23,21 @@ public class Inventory implements IInventoryClick
 		if (!event.getInventory().getName().contains("'s Bank Vault"))
 			return;
 
-		List<IPlayer> viewers = event.getInventory().getViewers();
-		if (!bankHandler.isViewingBank(viewers)) // Double check someone didn't name a random chest "'s Bank Vault"
+		IPlayer viewer = event.getWhoClicked();
+
+		if (!bankHandler.isViewingBank(viewer)) // Double check someone didn't name a random chest "'s Bank Vault"
 			return;
 
 		if (!Config.isBlacklistedItem(event.getCurrentItem()))
 			return;
 
 		event.cancel();
-		for (IPlayer viewer : viewers)
-		{
-			viewer.sendColouredMessage(Config.Messages.getItemNotAllowed());
-			viewer.closeInventory();
+		viewer.sendColouredMessage(Config.Messages.getItemNotAllowed());
+		viewer.closeInventory();
 
-			ILocation viewerLocation = viewer.getLocation();
-			if (viewerLocation != null)
-				viewerLocation.playSound(Sound.Creature.Villager.No);
-		}
+		ILocation viewerLocation = viewer.getLocation();
+		if (viewerLocation != null)
+			viewerLocation.playSound(Sound.Creature.Villager.No);
 	}
 
 	private final BankHandler bankHandler;
