@@ -25,6 +25,9 @@ public class Inventory implements IInventoryClick
 
 		IPlayer viewer = event.getWhoClicked();
 
+		if (viewer.hasPermission("runsafe.bank.blacklistOverride"))
+			return;
+
 		if (!bankHandler.isViewingBank(viewer)) // Double check someone didn't name a random chest "'s Bank Vault"
 			return;
 
