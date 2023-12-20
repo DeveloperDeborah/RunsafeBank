@@ -2,13 +2,15 @@ package no.runsafe.runsafebank.events;
 
 import no.runsafe.framework.api.ILocation;
 import no.runsafe.framework.api.event.inventory.IInventoryClick;
+import no.runsafe.framework.api.event.inventory.IInventoryClosed;
 import no.runsafe.framework.api.player.IPlayer;
 import no.runsafe.framework.minecraft.Sound;
 import no.runsafe.framework.minecraft.event.inventory.RunsafeInventoryClickEvent;
+import no.runsafe.framework.minecraft.event.inventory.RunsafeInventoryCloseEvent;
 import no.runsafe.runsafebank.BankHandler;
 import no.runsafe.runsafebank.Config;
 
-public class Inventory implements IInventoryClick
+public class Inventory implements IInventoryClick, IInventoryClosed
 {
 	public Inventory(BankHandler bankHandler)
 	{
@@ -35,10 +37,16 @@ public class Inventory implements IInventoryClick
 		event.cancel();
 		viewer.sendColouredMessage(Config.Messages.getItemNotAllowed());
 		viewer.closeInventory();
+		viewer.playSound(Sound.Creature.Villager.No);
+	}
 
-		ILocation viewerLocation = viewer.getLocation();
-		if (viewerLocation != null)
-			viewerLocation.playSound(Sound.Creature.Villager.No);
+	@Override
+	public void OnInventoryClosed(RunsafeInventoryCloseEvent event)
+	{
+		if (!event.getInventory().getName().contains("'s Bank Vault"))
+			return;
+
+		event.getPlayer().playSound(Sound.Chest.EnderChestClose);
 	}
 
 	private final BankHandler bankHandler;

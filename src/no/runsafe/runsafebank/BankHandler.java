@@ -2,6 +2,7 @@ package no.runsafe.runsafebank;
 
 import no.runsafe.framework.api.event.plugin.IPluginDisabled;
 import no.runsafe.framework.api.player.IPlayer;
+import no.runsafe.framework.minecraft.Sound;
 import no.runsafe.framework.minecraft.inventory.RunsafeInventory;
 
 import java.util.ArrayList;
@@ -24,6 +25,7 @@ public class BankHandler implements IPluginDisabled
 			this.loadBank(owner);
 
 		viewer.openInventory(this.loadedBanks.get(owner));
+		viewer.playSound(Sound.Chest.EnderChestOpen);
 		Plugin.Debugger.debugFine(String.format("Opening %s's bank for %s", owner.getName(), viewer.getName()));
 	}
 
@@ -88,6 +90,7 @@ public class BankHandler implements IPluginDisabled
 		{
 			suspect.sendColouredMessage(Config.Messages.getOverloadedWarning());
 			suspect.closeInventory();
+			suspect.playSound(Sound.Creature.Illager.Illusion.CastSpell);
 			loadedBanks.remove(suspect);
 		}
 
