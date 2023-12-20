@@ -35,10 +35,7 @@ public class Inventory implements IInventoryClick
 		event.cancel();
 		viewer.sendColouredMessage(Config.Messages.getItemNotAllowed());
 		viewer.closeInventory();
-
-		ILocation viewerLocation = viewer.getLocation();
-		if (viewerLocation != null)
-			viewerLocation.playSound(Sound.Creature.Villager.No);
+		viewer.playSound(Sound.Creature.Villager.No, 1, 1);
 	}
 
 	private final BankHandler bankHandler;
