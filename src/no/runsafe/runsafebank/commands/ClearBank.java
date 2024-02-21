@@ -29,9 +29,10 @@ public class ClearBank extends ExecutableCommand
 
         bankHandler.clearBank(bankOwner);
 
-		if (executor instanceof IPlayer)
-			((IPlayer) executor).playSound(Sound.Item.Bottle.Empty);
-
+		    if (executor instanceof IPlayer)
+		    {
+			    ((IPlayer) executor).playSound(Sound.Item.Bottle.Empty);
+		    }
         return String.format(Config.Messages.getCommandDeleteBank(), bankOwner.getPrettyName());
     }
     private final BankHandler bankHandler;

@@ -1,6 +1,5 @@
 package no.runsafe.runsafebank.events;
 
-import no.runsafe.framework.api.ILocation;
 import no.runsafe.framework.api.event.inventory.IInventoryClick;
 import no.runsafe.framework.api.event.inventory.IInventoryClosed;
 import no.runsafe.framework.api.player.IPlayer;
