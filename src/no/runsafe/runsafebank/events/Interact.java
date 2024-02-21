@@ -20,7 +20,7 @@ public class Interact implements IPlayerInteractEvent
 	public void OnPlayerInteractEvent(RunsafePlayerInteractEvent event)
 	{
 		IBlock block = event.getBlock();
-		if (block == null || !event.isRightClick() || !block.is(Item.Decoration.EnderChest))
+		if (block == null || event.isNotRightClick() || !block.is(Item.Decoration.EnderChest))
 			return;
 
 		IPlayer player = event.getPlayer();
