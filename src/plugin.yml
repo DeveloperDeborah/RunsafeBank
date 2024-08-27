@@ -3,7 +3,7 @@ main: no.runsafe.runsafebank.Plugin
 version: 1.0.@BUILD@
 authors: []
 depend: []
-description:
+description: 'Just some item storage'
 commands:
   viewbank:
     description: Opens a players bank
